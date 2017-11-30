@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='xanes-quant',
+    name='quantorxs',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -21,7 +21,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/corentinlg/Xanes-Quant',
+    url='https://github.com/corentinlg/quantorxs',
 
     # Author details
     author='Corentin Le Guillou',
@@ -45,8 +45,8 @@ setup(
 
     keywords='XANES abundance quantification',
     packages=[
-        "xanes-quant",
-        "xanes-quant.tests"],
+        "quantorxs",
+        "quantorxs.tests"],
 
     install_requires=[
         'numpy',
@@ -55,7 +55,7 @@ setup(
         'matplotlib'],
 
     package_data={
-        'xanes-quant': ['data/*'],
+        'quantorxs': ['data/*'],
     },
 
     scripts=['bin/quantorxs'],
