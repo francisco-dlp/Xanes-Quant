@@ -2,3 +2,8 @@
 """Command line quantorxs interface
 
 """
+import os
+
+from quantorxs.main import process_spectra
+
+process_spectra(os.getcwd(), savepath="QUANTORXS results")
