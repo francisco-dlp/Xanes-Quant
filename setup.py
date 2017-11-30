@@ -55,7 +55,7 @@ setup(
         'matplotlib'],
 
     package_data={
-        'quantorxs': ['data/*.fif2',
+        'quantorxs': ['data/*.f1f2',
                       'data/example_spectra/*.txt'],
     },
 
