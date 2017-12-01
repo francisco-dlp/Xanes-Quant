@@ -6,4 +6,4 @@ import os
 
 from quantorxs.main import process_spectra
 
-process_spectra(os.getcwd(), savepath="QUANTORXS results")
+process_spectra(os.getcwd(), savepath="QUANTORXS results", fig_format="png")

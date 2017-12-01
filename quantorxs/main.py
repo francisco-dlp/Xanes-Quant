@@ -100,8 +100,7 @@ def powerlaw_Bgd (E, OD, Emin, Estop):
     return OD_lb_powlaw
 
 # Normalize the spectrum by fitting the f2 scattering over a range of pre-edge and post-edge energies then plot
-def normalize_f2(OD, f, E, E_Cf2, OD_Cf2, E_Nf2, OD_Nf2, E_Of2, OD_Of2, savepath):
-    f = os.path.splitext(os.path.split(f)[1])[0]
+def normalize_f2(OD, f, E, E_Cf2, OD_Cf2, E_Nf2, OD_Nf2, E_Of2, OD_Of2, savepath, fig_format):
     Ei, ODi = discretize (E, OD, Emin, max(E))
     Ei_C_f2, ODi_C_f2 = discretize (E_Cf2, OD_Cf2, Emin, max(E))
     #Ei_K_f2, ODi_K_f2 = discretize (E_Nf2, OD_Nf2, Emin, max(E))
@@ -221,11 +220,12 @@ def normalize_f2(OD, f, E, E_Cf2, OD_Cf2, E_Nf2, OD_Nf2, E_Of2, OD_Of2, savepath
         (B, Kc, Kn, Ko, amp1, index1, amp2, index2, amp3, index3) = (param[0], param[1], 0, 0, param[2], param[3], 0, 0, 0, 0)
 
     # Plots the raw spectrum as well as the fitted F2 absorption cross section functions
-    plt.legend([f])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
     plt.plot(Ei, ODi, Ei, B + Kc*ODi_C_f2 + Kn*ODi_N_f2 + Ko*ODi_O_f2 + amp1*(Ei**index1) + amp2*(Ei**index2) + amp3*(Ei**index3))
-    fig_path = os.path.join(savepath, "figures", f + '_F2_fitted.pdf')
+    title = os.path.splitext(os.path.split(f)[1])[0]
+    fig_path = os.path.join(savepath, "figures", title + '_F2_fitted.%s' % fig_format)
+    plt.legend([title])
     plt.savefig(fig_path)
     plt.clf()
 
@@ -291,21 +291,27 @@ def ErFit (Ei, ODnorm, w, optim, Enorm):
     Er = sum (ER)
     return Er
 
+
 # Plot each Carbon or Nitrogen edge spectrum individually and save it
-def fig_spectre (Ei, ODnorm, spectre, savepath):
+def fig_spectre (Ei, ODnorm, spectre, savepath, fig_format):
     plt.plot(Ei, ODnorm)
-    plt.legend([spectre[:len(spectre)-len('.txt')]])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
     title = os.path.splitext(os.path.split(spectre)[1])[0]
+    plt.legend([title])
     if Enorm_C <= max(Ei) <= Emin_N:
-        plt.savefig(os.path.join(savepath, "figures", title +'_C.pdf'))
+        plt.savefig(
+            os.path.join(savepath,
+                         "figures",
+                         title + '_C.%s' % fig_format
+                         )
+            )
     if max(Ei) >= Enorm_N:
-        plt.savefig(os.path.join(savepath, "figures", title +'_N.pdf'))
+        plt.savefig(os.path.join(savepath, "figures", title +'_N.%s' % fig_format))
     plt.clf()
 
 #plot all fitted gaussians together with data and total fit
-def plotgaussians_C (Eifit, optim, spectre, w, ODfit_C, savepath):
+def plotgaussians_C (Eifit, optim, spectre, w, ODfit_C, savepath, fig_format):
     k = 0
     for i in Func_Group_C [0:20]:
         plt.plot (Eifit, gaussian(Eifit, optim[k], Func_Group_C [k], w))
@@ -326,15 +332,15 @@ def plotgaussians_C (Eifit, optim, spectre, w, ODfit_C, savepath):
     plt.plot (Eifit, gaussian(Eifit, optim[34], 312.5, 2))
     plt.plot(Eifit, all_gaussians_C(Eifit, w, *optim))
     plt.plot(Eifit, ODfit_C)
-    plt.legend([spectre[:len(spectre)-len('.txt')]])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
     title = os.path.splitext(os.path.split(spectre)[1])[0]
-    plt.savefig(os.path.join(savepath, "figures", title + '_C_fitted.pdf'))
+    plt.legend([title])
+    plt.savefig(os.path.join(savepath, "figures", title + '_C_fitted.%s' % fig_format))
     plt.clf()
 
 #plot all individual fitted gaussians together with data and total fit
-def plotgaussians_N (Eifit, optim, spectre, w, ODfit_N, savepath):
+def plotgaussians_N (Eifit, optim, spectre, w, ODfit_N, savepath, fig_format):
     k=0
     for i in Func_Group_N [0:20]:
         plt.plot (Eifit, gaussian(Eifit, optim[k], Func_Group_N [k], w))
@@ -350,15 +356,14 @@ def plotgaussians_N (Eifit, optim, spectre, w, ODfit_N, savepath):
     plt.plot (Eifit, gaussian(Eifit, optim[29], 420, 2))
     plt.plot(Eifit, all_gaussians_N (Eifit, w, *optim))
     plt.plot(Eifit, ODfit_N)
-    plt.legend([spectre[:len(spectre)-len('.txt')]])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
-
     title = os.path.splitext(os.path.split(spectre)[1])[0]
-    plt.savefig(os.path.join(savepath, "figures", title +'_N_fitted.pdf'))
+    plt.legend([title])
+    plt.savefig(os.path.join(savepath, "figures", title +'_N_fitted.%s' % fig_format))
     plt.clf()
 
-def process_spectra(spectra_folder_path, savepath):
+def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
     """Quantify all the spectra in the list, plot and save the results.
 
     If the spectrum stop before the Nitrogen edge, then only the carbon edge is treated/fitted.
@@ -447,13 +452,13 @@ def process_spectra(spectra_folder_path, savepath):
         tab_C[i,:] = abs(optim_C)
         tab_Erfit_C[i] = ErFit (Eifit_C, ODfit_C, w_C, abs(optim_C), Enorm_C)
 
-        fig_spectre (Eifit_C, ODfit_C, f, savepath=savepath)
-        plotgaussians_C (Eifit_C, optim_C, f, w_C, ODfit_C=ODfit_C, savepath=savepath)
+        fig_spectre (Eifit_C, ODfit_C, f, savepath=savepath, fig_format=fig_format)
+        plotgaussians_C (Eifit_C, optim_C, f, w_C, ODfit_C=ODfit_C, savepath=savepath, fig_format=fig_format)
         tabQuant_group[i, :] = (((optim_C [1] + optim_C [2] + optim_C [3] + optim_C [4]) / 4 * Aro_pente + Aro_ordo), ((optim_C [6] + optim_C [7] + optim_C [8]) / 3 * Keton_pente + Keton_ordo), ((optim_C[10] + optim_C[11]) / 2 * Ali_pente + Ali_ordo), ((optim_C[13]) * Carbo_pente - Carbo_ordo))
 
         # If the spectrum is acquired up to Estop_N (397.5 eV), the the F2 normalization is performed as well
         if max(E) >= 395:
-            Kc1, Kn, Ko = normalize_f2 (OD, f, E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2, E_Nf2=E_Nf2, OD_Nf2=OD_Nf2, E_Of2=E_Of2, OD_Of2=OD_Of2, savepath=savepath)
+            Kc1, Kn, Ko = normalize_f2 (OD, f, E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2, E_Nf2=E_Nf2, OD_Nf2=OD_Nf2, E_Of2=E_Of2, OD_Of2=OD_Of2, savepath=savepath, fig_format=fig_format)
             OD_Normf2_C = ODi_C/Kc1
             tab_f2_C [i] = Kc1
             tab_norm_sp_C_f2[i,:] = OD_Normf2_C
@@ -491,13 +496,13 @@ def process_spectra(spectra_folder_path, savepath):
             tab_N[i,:] = abs(optim_N)
             tab_Erfit_N[i] = ErFit (Eifit_N, ODfit_N, w_N, abs(optim_N), Enorm_N)
 
-            fig_spectre (Eifit_N, ODfit_N, f, savepath=savepath)
+            fig_spectre (Eifit_N, ODfit_N, f, savepath=savepath, fig_format=fig_format)
             plotgaussians_N (Eifit_N, optim_N, f, w_N, ODfit_N=ODfit_N,
-                             savepath=savepath)
+                             savepath=savepath, fig_format=fig_format)
 
             #If the spectrum is acquired above Emax_N (450 eV), F2-normalization and fit are performed
             if max(E) >= Emax_N:
-                Kc2, Kn, Ko = normalize_f2 (OD, f, E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2, E_Nf2=E_Nf2, OD_Nf2=OD_Nf2, E_Of2=E_Of2, OD_Of2=OD_Of2, savepath=savepath)
+                Kc2, Kn, Ko = normalize_f2 (OD, f, E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2, E_Nf2=E_Nf2, OD_Nf2=OD_Nf2, E_Of2=E_Of2, OD_Of2=OD_Of2, savepath=savepath, fig_format=fig_format)
                 OD_Normf2_N = ODi_N/Kn
                 tab_norm_sp_N_f2 [i,:] = OD_Normf2_N
                 tab_f2_N [i] = Kn
@@ -530,7 +535,7 @@ def process_spectra(spectra_folder_path, savepath):
 
             #If the spectrum is acquired above Emax_O (680 eV), F2-normalization and fit are performed
             if max(E) >= Emax_O:
-                Kc3, Kn2, Ko = normalize_f2 (OD, f,E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2,  E_Nf2=E_Nf2, OD_Nf2=OD_Nf2,E_Of2=E_Of2,  OD_Of2=OD_Of2, savepath=savepath)
+                Kc3, Kn2, Ko = normalize_f2 (OD, f,E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2,  E_Nf2=E_Nf2, OD_Nf2=OD_Nf2,E_Of2=E_Of2,  OD_Of2=OD_Of2, savepath=savepath, fig_format=fig_format)
                 OD_Normf2_O = ODi_O/Ko
     #           tab_norm_sp_O_f2 [i,:] = OD_Normf2_O
     #           tab_f2_O [i] = Ko
