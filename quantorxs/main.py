@@ -101,6 +101,7 @@ def powerlaw_Bgd (E, OD, Emin, Estop):
 
 # Normalize the spectrum by fitting the f2 scattering over a range of pre-edge and post-edge energies then plot
 def normalize_f2(OD, f, E, E_Cf2, OD_Cf2, E_Nf2, OD_Nf2, E_Of2, OD_Of2, savepath):
+    f = os.path.splitext(os.path.split(f)[1])[0]
     Ei, ODi = discretize (E, OD, Emin, max(E))
     Ei_C_f2, ODi_C_f2 = discretize (E_Cf2, OD_Cf2, Emin, max(E))
     #Ei_K_f2, ODi_K_f2 = discretize (E_Nf2, OD_Nf2, Emin, max(E))
@@ -224,7 +225,8 @@ def normalize_f2(OD, f, E, E_Cf2, OD_Cf2, E_Nf2, OD_Nf2, E_Of2, OD_Of2, savepath
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
     plt.plot(Ei, ODi, Ei, B + Kc*ODi_C_f2 + Kn*ODi_N_f2 + Ko*ODi_O_f2 + amp1*(Ei**index1) + amp2*(Ei**index2) + amp3*(Ei**index3))
-    plt.savefig(os.path.join(savepath, f + 'F2_fitted.pdf'))
+    fig_path = os.path.join(savepath, "figures", f + '_F2_fitted.pdf')
+    plt.savefig(fig_path)
     plt.clf()
 
     return Kc, Kn, Ko
@@ -295,10 +297,11 @@ def fig_spectre (Ei, ODnorm, spectre, savepath):
     plt.legend([spectre[:len(spectre)-len('.txt')]])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
+    title = os.path.splitext(os.path.split(spectre)[1])[0]
     if Enorm_C <= max(Ei) <= Emin_N:
-        plt.savefig(os.path.join(savepath, spectre[:len(spectre)-len('.txt')]+'_C.pdf'))
+        plt.savefig(os.path.join(savepath, "figures", title +'_C.pdf'))
     if max(Ei) >= Enorm_N:
-        plt.savefig(os.path.join(savepath, spectre[:len(spectre)-len('.txt')]+'_N.pdf'))
+        plt.savefig(os.path.join(savepath, "figures", title +'_N.pdf'))
     plt.clf()
 
 #plot all fitted gaussians together with data and total fit
@@ -326,7 +329,8 @@ def plotgaussians_C (Eifit, optim, spectre, w, ODfit_C, savepath):
     plt.legend([spectre[:len(spectre)-len('.txt')]])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
-    plt.savefig(os.path.join(savepath, spectre[:len(spectre)-len('.txt')]+'_C_fitted.pdf'))
+    title = os.path.splitext(os.path.split(spectre)[1])[0]
+    plt.savefig(os.path.join(savepath, "figures", title + '_C_fitted.pdf'))
     plt.clf()
 
 #plot all individual fitted gaussians together with data and total fit
@@ -349,7 +353,9 @@ def plotgaussians_N (Eifit, optim, spectre, w, ODfit_N, savepath):
     plt.legend([spectre[:len(spectre)-len('.txt')]])
     plt.xlabel('Energy')
     plt.ylabel('O.D.')
-    plt.savefig(os.path.join(savepath, spectre[:len(spectre)-len('.txt')]+'_N_fitted.pdf'))
+
+    title = os.path.splitext(os.path.split(spectre)[1])[0]
+    plt.savefig(os.path.join(savepath, "figures", title +'_N_fitted.pdf'))
     plt.clf()
 
 def process_spectra(spectra_folder_path, savepath):
@@ -366,21 +372,9 @@ def process_spectra(spectra_folder_path, savepath):
         i += 1
     savepath = "%s%s" % (savepath,i)
     os.makedirs(os.path.join(savepath, "txt files"))
+    os.makedirs(os.path.join(savepath, "figures"))
 
     # Opens the source file repertory, creates a list of them, and shorten their name (repoertory and extension) for printing purposes.
-    def listdirectory(spectra_folder_path):
-        spectra_list=[]
-        l = glob.glob(spectra_folder_path+'\\*')
-        for i in l:
-            if os.path.isdir(i): spectra_list.extend(listdirectory(i))
-            else: spectra_list.append(i)
-        return spectra_list
-    spectra_list = listdirectory(spectra_folder_path)
-
-    i=0
-    for f in spectra_list:
-        spectra_list[i] = spectra_list[i][len('Raw Axis Spectra\\'):len(spectra_list[i])-len('.txt')]
-        i=i+1
 
     # Defines all lists and variable used later to store the data
     print(os.getcwd())
@@ -390,7 +384,9 @@ def process_spectra(spectra_folder_path, savepath):
     # E_Caf2, OD_Caf2 = openf2('data/Calciumf2.f1f2')
     E_Of2, OD_Of2 = openf2('data/Oxygenf2.f1f2')
 
-    file_nb = len(glob.glob(spectra_folder_path + "/*.txt"))                       # Number of files in the source folder
+    spectra2process = glob.glob(spectra_folder_path + "/*.txt")
+    spectra_list = [os.path.splitext(os.path.split(sp)[1])[0] for sp in spectra2process]
+    file_nb = len(spectra2process)                       # Number of files in the source folder
     size_C = round(((Emax_C-Emin)/dE)+1)                             # Size of the array for the energy axis
     size_N = round(((Emax_N-Emin_N)/dE)+1)
     size_O = round(((Emax_O-Emin_O)/dE)+1)
@@ -468,8 +464,8 @@ def process_spectra(spectra_folder_path, savepath):
             optim_C_f2, success = optimize.leastsq(errfunc, guess [:], args=(Eifit_C, ODfit_C))
             tab_C_f2[i,:] = abs(optim_C_f2)
             tab_Erfit_C_f2[i] = ErFit (Eifit_C, ODfit_C, w_C, abs(optim_C_f2), Enorm_C)
-
-        f_C = open(os.path.join(savepath, "txt file", f[:len(f)-len('.txt')]+'_C.txt'), 'w')
+        title = os.path.splitext(os.path.split(f)[1])[0]
+        f_C = open(os.path.join(savepath, "txt files", title + '_C.txt'), 'w')
         l=0
         for j in Ei_C:
             f_C.write(str(np.around(Ei_C[l], decimals = 4))+'    ')
@@ -514,7 +510,8 @@ def process_spectra(spectra_folder_path, savepath):
                 tab_N_f2[i,:] = abs(optim_N_f2)
                 tab_Erfit_N_f2[i] = ErFit (Eifit_N, ODfit_N, w_N, abs(optim_N_f2), Enorm_N)
 
-            f_N = open(os.path.join(savepath, "txt files", f[:len(f)-len('.txt')]+'_N.txt'), 'w')
+            title = os.path.splitext(os.path.split(f)[1])[0]
+            f_N = open(os.path.join(savepath, "txt files", title +'_N.txt'), 'w')
             l=0
             for j in Ei_N:
                 f_N.write(str(np.around(Ei_N[l], decimals = 4))+'    ')
@@ -539,7 +536,8 @@ def process_spectra(spectra_folder_path, savepath):
     #           tab_f2_O [i] = Ko
                 tab_OC_f2 [i] = Ko/Kc3
 
-            f_O = open(os.path.join(savepath, "txt files", f[:len(f)-len('.txt')]+'_O.txt'), 'w')
+            title = os.path.splitext(os.path.split(f)[1])[0]
+            f_O = open(os.path.join(savepath, "txt files", title +'_O.txt'), 'w')
             l=0
             for j in Ei_O:
                 f_O.write(str(np.around(Ei_O[l], decimals = 4)) + '    ')
@@ -556,7 +554,7 @@ def process_spectra(spectra_folder_path, savepath):
     ### Export in an excel file the fitted functional groups heights for C and N as well as normalized spectra data and plots
     #Creates the Excel file and its different tabs
     cell_nb = str (file_nb+2)
-    workbook = xlsxwriter.Workbook(os.path.join(savepath, "results.xlsx"))
+    workbook = xlsxwriter.Workbook(os.path.join(savepath, "results.xlsx"), {'nan_inf_to_errors': True})
     worksheet_param = workbook.add_worksheet(name = 'Analysis parameters')
     worksheet_data = workbook.add_worksheet(name = 'Quantified data')
     worksheet_spNorm_C = workbook.add_worksheet(name = 'C spectra Area_Norm')
@@ -689,7 +687,7 @@ def process_spectra(spectra_folder_path, savepath):
         #Plots the spectra of all files
     chart_C = workbook.add_chart({'type': 'scatter', 'subtype' : 'smooth'})
     i=0
-    for f in os.listdir(spectra_folder_path):
+    for f in spectra2process:
         chart_C.add_series({
             'categories': ['C spectra Area_Norm', 2, 0, int(((Emax_C-Emin)/dE)+2), 0],
             'values': ['C spectra Area_Norm', 2, i+1, int(((Emax_C-Emin)/dE)+2), i+1],
@@ -717,7 +715,7 @@ def process_spectra(spectra_folder_path, savepath):
     #Fills the worksheet containing the Nitrogen edge spectra normalized to their Area
     norm_sp_N = tab_norm_sp_N.T
     worksheet_spNorm_N.write_row (0,1, spectra_list)
-    Ei_N = Ei_C[(Emin_N-Emin)/dE:(Emax_N-Emin)/dE]
+    Ei_N = Ei_C[int((Emin_N-Emin)/dE):int((Emax_N-Emin)/dE)]
     k=0
     for i in range (0, int((Emax_N-Emin_N)/dE)):
         Ei_N[k] = Emin_N + dE*k
@@ -728,7 +726,7 @@ def process_spectra(spectra_folder_path, savepath):
         #Plots the spectra of all files
     chart_N = workbook.add_chart({'type': 'scatter', 'subtype' : 'smooth'})
     i=0
-    for f in os.listdir(spectra_folder_path):
+    for f in spectra2process:
         chart_N.add_series({
             'categories': ['N spectra Area_Norm', 2, 0, int(((Emax_N-Emin_N)/dE)+2), 0],
             'values': ['N spectra Area_Norm', 2, i+1, int(((Emax_N-Emin_N)/dE)+2), i+1],
@@ -756,7 +754,7 @@ def process_spectra(spectra_folder_path, savepath):
     #Fills the worksheet containing the Oxygen edge spectra normalized to their Area
     norm_sp_O = tab_norm_sp_O.T
     worksheet_spNorm_O.write_row (0,1, spectra_list)
-    Ei_O = Ei_C[(Emin_O-Emin)/dE:(Emax_O-Emin)/dE]
+    Ei_O = Ei_C[int((Emin_O-Emin)/dE):int((Emax_O-Emin)/dE)]
     k=0
     for i in range (0, int((Emax_O-Emin_O)/dE)):
         Ei_O[k] = Emin_O + dE*k
@@ -767,7 +765,7 @@ def process_spectra(spectra_folder_path, savepath):
         #Plots the spectra of all files
     chart_O = workbook.add_chart({'type': 'scatter', 'subtype' : 'smooth'})
     i=0
-    for f in os.listdir(spectra_folder_path):
+    for f in spectra2process:
         chart_O.add_series({
             'categories': ['O spectra Area_Norm', 2, 0, int(((Emax_O-Emin_O)/dE)+2), 0],
             'values': ['O spectra Area_Norm', 2, i+1, int(((Emax_O-Emin_O)/dE)+2), i+1],
@@ -796,7 +794,7 @@ def process_spectra(spectra_folder_path, savepath):
     chart_rawspectra = workbook.add_chart({'type': 'scatter', 'subtype' : 'smooth'})
 
     i=0
-    for f in os.listdir(spectra_folder_path):
+    for f in spectra2process:
         E, OD = openfile(f)
         worksheet_rawspectra.write_row (0, 2*i, [spectra_list[i]])
         worksheet_rawspectra.write_column (1, 2*i, E)
