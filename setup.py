@@ -60,4 +60,9 @@ setup(
     },
 
     scripts=['bin/quantorxs'],
+    entry_points={
+    'gui_scripts': [
+        'quantorxs_gui = quantorxs.gui_tk:main',
+     ]
+},
     )
