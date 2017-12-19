@@ -20,10 +20,11 @@ def main():
     root = tk.Tk()
     demo = tk.BooleanVar()
     directory = tk.StringVar("")
+    results_directory_label = tk.Label(root, text="Results directory")
+    results_directory_label.grid(row=1, column=0)
     T = tk.Text(root, height=1, width=30)
-    T.pack()
     T.insert(tk.END, "QUANTORXS results")
-    T.grid(row=1)
+    T.grid(row=1, column=1)
     tk.Checkbutton(root, text="Demo", variable=demo).grid(row=2, sticky=tk.W)
 
     directory_button = tk.Button(root,
