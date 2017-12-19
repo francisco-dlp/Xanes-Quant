@@ -18,6 +18,7 @@ def main():
         print(directory.get())
 
     root = tk.Tk()
+    root.title("QUANTORXS GUI")
     demo = tk.BooleanVar()
     directory = tk.StringVar("")
     results_directory_label = tk.Label(root, text="Results directory")
