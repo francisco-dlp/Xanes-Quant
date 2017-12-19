@@ -8,7 +8,7 @@ def main():
         print(directory.get())
         call(["quantorxs",
              "--directory", directory.get(),
-             # "--results_directory", T.get(),
+             "--results_directory", T.get("1.0",'end-1c'),
              "--fig_format", formats[v.get()][0].lower(),
              "--demo"]
              )
