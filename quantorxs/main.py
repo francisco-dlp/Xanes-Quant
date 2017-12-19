@@ -2,6 +2,8 @@ import os
 from math import *
 import glob
 import os.path
+import logging
+from shutil import copy2
 
 from scipy import optimize
 import xlsxwriter
@@ -13,7 +15,7 @@ import pkg_resources
 
 from quantorxs.io import openf2, openfile
 
-
+logger = logging.getLogger(__name__)
 # Description of all parameters used for further analysis of the spectra
 
 Emin = 270              # Lower energy of the range used for the raw spectrum _ 270
@@ -534,6 +536,7 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
 
     i = 0
     for f in glob.glob(spectra_folder_path + "/*.txt"):
+        logger.info("Processing file %s" % f)
         E, OD = openfile(f)
         a = 0
         for p in range(0, len(E)):
@@ -548,7 +551,7 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
 
         # Defines the sub energy region over which the fit is performed
         Eifit_C = Ei_C[int((Estop_C - Emin) / dE):int((Efit_C - Emin) / dE)]
-        ODfit_C = ODnorm_C[int((Estop_C - Emin) / dE)                           :int((Efit_C - Emin) / dE)]
+        ODfit_C = ODnorm_C[int((Estop_C - Emin) / dE):int((Efit_C - Emin) / dE)]
 
         def errfunc(p, x, y): return (all_gaussians_C(x, w_C, *p) - y)**2
         guess = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -603,9 +606,8 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
             tabA_N[i] = A_N
             tab_NC[i] = (A_N / A_C) * (3.672 / 3.81)
 
-            Eifit_N = Ei_N[int((Estop_N - Emin_N) / dE)                           :int((Efit_N - Emin_N) / dE)]
-            ODfit_N = ODnorm_N[int((Estop_N - Emin_N) / dE)
-                                   :int((Efit_N - Emin_N) / dE)]
+            Eifit_N = Ei_N[int((Estop_N - Emin_N) / dE):int((Efit_N - Emin_N) / dE)]
+            ODfit_N = ODnorm_N[int((Estop_N - Emin_N) / dE)                               :int((Efit_N - Emin_N) / dE)]
 
             def errfunc(p, x, y): return (all_gaussians_N(x, w_N, *p) - y)**2
             guess = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -1033,151 +1035,28 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
     workbook.close()
 
 
-"""
-  # Perform linear background correction
-def linBackground (E, OD, Emin, Estop):
-    Estop1 = E >= Emin				    #Cherche toutes les valeurs de E < Estop en mode bouléen (renvoie du vrai ou faux)
-    Es1 = E[Estop1]
-    Estop2 = Es1 <= Estop
-    Es2 = Es1[Estop2]						#Renvoie les valeurs de E inférieure à Estop
-    ODs1 = OD[Estop1]
-    ODs2 = ODs1[Estop2]
-    slope, intercept, r_value, p_value, std_err = stats.linregress(Es2, ODs2)		#Effectue la régréssion linéaire sur Es, ODs
-    a = slope
-    b = intercept
-    ODlb = OD-(a*E+b)					#Calcule le nouveau spectre avec régression lineaire
-    return ODlb
+def run(spectra_folder_path, results_directory, fig_format, demo=False):
+    if demo:
+        demo_path = os.path.join(spectra_folder_path, "QUANTORXS demo")
+        print("Creating the demo directory in %s" % demo_path)
+        if os.path.exists(demo_path):
+            raise ValueError(
+                "The demo directory already exists in the directory: %s" %
+                directory)
+        os.makedirs(demo_path)
+        files = [
+            "nebulotron.txt",
+            "PEEK.txt",
+            "PES_S2.txt",
+            "PLA-CO_S2.txt",
+        ]
+        for f in files:
+            filepath = pkg_resources.resource_filename(
+                "quantorxs", os.path.join("data", "example_spectra", f))
+            copy2(filepath, demo_path)
+        spectra_folder_path = demo_path
 
-    # perform linear regression for the post edge determination (Athena Style)
-def postedge (Ei, ODi, EpeMin, EpeMax, Emin, Ec):
-    ODPE = ODi [int((EpeMin-Emin)/dE):int((EpeMax+1-Emin)/dE)]
-    Eipe = Ei[int((EpeMin-Emin)/dE):int((EpeMax+1-Emin)/dE)]
-    slope, intercept, r_value, p_value, std_err = stats.linregress(Eipe, ODPE)		#Effectue la régréssion linéaire sur Es, ODs
-    ape  = slope
-    bpe = intercept
-    c = ape*Ec + bpe
-    ODAth = ODi/c
-    return c, ODAth
-
-def normalize_f2_OneByOne(OD):
-    Ei, ODi = discretize (E, OD, Emin, max(E))
-    Ei_O_f2, ODi_O_f2 = discretize (E_Of2, OD_Of2, Emin, max(E))
-    Ei_C_f2, ODi_C_f2 = discretize (E_Cf2, OD_Cf2, Emin, max(E))
-    #Ei_K_f2, ODi_K_f2 = discretize (E_Nf2, OD_Nf2, Emin, max(E))
-    #Ei_Ca_f2, ODi_Ca_f2 = discretize (E_Nf2, OD_Nf2, Emin, max(E))
-    Ei_N_f2, ODi_N_f2 = discretize (E_Nf2, OD_Nf2, Emin, max(E))
-
-    Kc = 0
-    Kn = 0
-    Ko = 0
-
-    Ei_fit = np.ndarray((int((Estop_C-Emin)/dE) + int((Estop_N-EpeMin_C)/dE)))
-    ODi_fit = np.ndarray((int((Estop_C-Emin)/dE) + int((Estop_N-EpeMin_C)/dE)))
-    ODi_f2_fitC = np.ndarray((int((Estop_C-Emin)/dE) + int((Estop_N-EpeMin_C)/dE)))
-
-    k=0
-    for i in range (0, int((Estop_C-Emin)/dE)):
-        Ei_fit[k] = Ei[i]
-        ODi_fit[k] = ODi[i]
-        ODi_f2_fitC[k] =  ODi_C_f2[i]
-        k=k+1
-    for i in range (int((EpeMin_C-Emin)/dE), int((Estop_N-Emin)/dE)):
-        Ei_fit[k] = Ei[i]
-        ODi_fit[k] = ODi[i]
-        ODi_f2_fitC[k] =  ODi_C_f2[i]
-        k=k+1
-
-    B = 0
-    Kc = 0.0
-    amp = 1
-    index = 1
-    param = np.array([B, Kc, amp, index])
-    errfunc = lambda param, x, y: ((param[0] + param[1]*ODi_f2_fitC + param[2] * (x**param[3])) - y)**2
-    guess = param
-    param, success = optimize.leastsq(errfunc, guess[:], args = (Ei_fit, ODi_fit))
-    Kc = param[1]
-
-    if max(E) > 400:
-        Ei_fit = np.ndarray(int((Estop_N-EpeMin_C)/dE) + int((450-EpeMin_N)/dE))
-        ODi_fit = np.ndarray(int((Estop_N-EpeMin_C)/dE) + int((450-EpeMin_N)/dE))
-        ODi_f2_fitN = np.ndarray(int((Estop_N-EpeMin_C)/dE) + int((450-EpeMin_N)/dE))
-
-        k=0
-        for i in range (int((EpeMin_C-Emin)/dE), int((Estop_N-Emin)/dE)):
-            Ei_fit[k] = Ei[i]
-            ODi_fit[k] = ODi[i]
-            ODi_f2_fitN[k] = ODi_N_f2[i]
-            k=k+1
-        for i in range (int((EpeMin_N-Emin)/dE), int((450-Emin)/dE)):
-            Ei_fit[k] = Ei[i]
-            ODi_fit[k] = ODi[i]
-            ODi_f2_fitN[k] = ODi_N_f2[i]
-            k=k+1
-
-        B = 0
-        Kn = 0.00
-        amp = 1
-        index = 1
-        param = np.array([B, Kn, amp, index])
-        errfunc = lambda param, x, y: ((param[0] + param[1]*ODi_f2_fitN + param[2]*(x**param[3])) - y)**2
-        guess = param
-        param, success = optimize.leastsq(errfunc, guess[:], args = (Ei_fit, ODi_fit))
-        Kn = param[1]
-
-    if max(E) > 500:
-        Ei_fit = np.ndarray((int((Estop_O-460)/dE) + int((Emax_O-EpeMin_O)/dE)), float)
-        ODi_fit = np.ndarray((int((Estop_O-460)/dE) + int((Emax_O-EpeMin_O)/dE)), float)			#Défini les dimensions et la classe de variable du tableau
-        ODi_f2_fitO = np.ndarray((int((Estop_O-460)/dE) + int((Emax_O-EpeMin_O)/dE)), float)			#Défini les dimensions et la classe de variable du tableau
-
-        k=0
-        for i in range (int((460-Emin)/dE), int((Estop_O-Emin)/dE)):
-            Ei_fit[k] = Ei[i]
-            ODi_fit[k] = ODi[i]
-            ODi_f2_fitO[k] = ODi_O_f2[i]
-            k=k+1
-        for i in range (int((EpeMin_O-Emin)/dE), int((Emax_O-Emin)/dE)):
-            Ei_fit[k] = Ei[i]
-            ODi_fit[k] = ODi[i]
-            ODi_f2_fitO[k] = ODi_O_f2[i]
-            k=k+1
-
-        B = 0
-        Ko = 0.0
-        amp = 1
-        index = 1
-
-        param = np.array([B, Ko, amp, index])
-        errfunc = lambda param, x, y: ((param[0] + param[1]*ODi_f2_fitO + param[2]*(x**param[3])) - y)**2
-        guess = param
-        param, success = optimize.leastsq(errfunc, guess[:], args = (Ei_fit, ODi_fit))
-
-        Ko = param[1]
-    return Kc, Kn, Ko
-
-# Calculate the area of the spectra over an energy range
-def FG_SurfCal(borneInf, borneSup, Ei, ODnorm):   #Fonction de calcul de surface
-    E_1 = Ei >= borneInf				                #Cherche toutes les valeurs de Ei>EQuiInf en mode bouléen (renvoie du vrai ou faux)
-    E1 = Ei[E_1]
-    OD1 = ODnorm[E_1]
-    E_2 = Ei >= borneSup
-    E2 = Ei[E_2]
-    OD2 = ODnorm[E_2]
-    Surf = simps (OD1, E1)- simps (OD2, E2)
-    return Surf
-
-    #Plot and save all normalized spectra within the same plot
-for f in os.listdir(spectra_folder_path) :
-    E, OD = openfile(f)
-    ODlb = powerlaw_Bgd (E, OD, Emin, Estop_C)
-    Ei, ODi = discretize (E, ODlb, Emin, Emax)
-#    Kc = normalize_f2_C (OD, Emax_C)
-#    OD_Normf2_C = ODi_C/Kc
-    ODnorm, A = normalize (Ei, ODi, Estop_C, Enorm_C)
-    plt.plot(Ei, ODnorm)
-    plt.legend(['All_spectra_Normalized'])
-    plt.xlabel('Energy')
-    plt.ylabel('O.D.')
-    plt.savefig('Data/All_Spectra_Normalized.pdf')
-plt.clf()
-
-"""
+    savepath = os.path.join(spectra_folder_path, results_directory)
+    process_spectra(spectra_folder_path=spectra_folder_path,
+                    savepath=savepath,
+                    fig_format=fig_format)

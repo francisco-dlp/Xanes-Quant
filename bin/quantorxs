@@ -4,11 +4,9 @@
 """
 import os
 import argparse
-from shutil import copy2
 
-import pkg_resources
 
-from quantorxs.main import process_spectra
+from quantorxs.main import run
 
 
 parser = argparse.ArgumentParser(
@@ -37,27 +35,8 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-if args.demo:
-    demo_path = os.path.join(args.directory, "QUANTORXS demo")
-    print("Creating the demo directory in %s" % demo_path)
-    if os.path.exists(demo_path):
-        raise ValueError(
-            "The demo directory already exists in the directory: %s" %
-            args.directory)
-    os.makedirs(demo_path)
-    files = [
-        "nebulotron.txt",
-        "PEEK.txt",
-        "PES_S2.txt",
-        "PLA-CO_S2.txt",
-    ]
-    for f in files:
-        filepath = pkg_resources.resource_filename(
-            "quantorxs", os.path.join("data", "example_spectra", f))
-        copy2(filepath, demo_path)
-    args.directory = demo_path
-
-savepath = os.path.join(args.directory, args.results_directory)
-process_spectra(spectra_folder_path=args.directory,
-                savepath=savepath,
-                fig_format=args.fig_format)
+run(
+    spectra_folder_path=args.directory,
+    savepath=args.results_directory,
+    fig_format=args.fig_format,
+    demo=args.demo)
