@@ -57,7 +57,7 @@ setup(
     package_data={
         'quantorxs': ['data/*.f1f2',
                       'data/example_spectra/*.txt',
-                      'data/images/quantorxs_logo.gif',
+                      'data/images/quantorxs_logo.gif',]
     },
 
     scripts=['bin/quantorxs'],
