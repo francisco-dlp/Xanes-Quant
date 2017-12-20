@@ -1042,7 +1042,7 @@ def run(spectra_folder_path, results_directory, fig_format, demo=False):
         if os.path.exists(demo_path):
             raise ValueError(
                 "The demo directory already exists in the directory: %s" %
-                directory)
+                spectra_folder_path)
         os.makedirs(demo_path)
         files = [
             "nebulotron.txt",

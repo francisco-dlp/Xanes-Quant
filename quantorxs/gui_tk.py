@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter.filedialog import askdirectory
 import tkinter.scrolledtext as ScrolledText
+from subprocess import call
 import logging
 import time
 import threading
 import os
-
-import pkg_resources
+import sys
 
 from quantorxs.main import run
 from quantorxs import logger as main_logger
@@ -47,23 +47,23 @@ def main():
         logger.info("Figure format: %s" % fig_format)
         logger.info("Demo mode %s" % demo.get())
         logger.info("Starting data analysis")
-        run(
-            spectra_folder_path=directory.get(),
-            results_directory=results_directory,
-            fig_format=fig_format,
-            demo=demo.get())
+        try:
+            run(
+                spectra_folder_path=directory.get(),
+                results_directory=results_directory,
+                fig_format=fig_format,
+                demo=demo.get())
+        except Exception as e:
+            logger.info("Unfortunately something went wrong.")
+            logger.exception("message")
+            sys.exit()
         logger.info("All done!")
+        sys.exit()
 
     def update_directory():
         directory.set(askdirectory())
 
-    t1 = threading.Thread(target=process_spectra, args=[])
     root = tk.Tk()
-    # Set the window's icon
-    iconpath = pkg_resources.resource_filename(
-        "quantorxs", os.path.join("data", "images", "quantorxs_logo.gif"))
-    imgicon = tk.PhotoImage(file=iconpath)
-    root.tk.call('wm', 'iconphoto', root._w, imgicon)
     root.title("QUANTORXS GUI")
     demo = tk.BooleanVar()
     directory = tk.StringVar("")
@@ -87,10 +87,13 @@ def main():
                             # fg="red",
                             command=quit)
     # quit_button.pack(side="left")
-    run_button = tk.Button(root,
-                           text="RUN",
-                           # fg="red",
-                           command=t1.start)
+
+    def create_and_start_new_procession_thread():
+        threading.Thread(target=process_spectra, args=[]).start()
+    run_button = tk.Button(
+        root,
+        text="RUN",
+        command=create_and_start_new_procession_thread)
 
     v = tk.IntVar()
     v.set(1)  # initializing the choice, i.e. Python
