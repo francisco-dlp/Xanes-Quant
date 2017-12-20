@@ -1,9 +1,9 @@
 import os
-from math import *
 import glob
 import os.path
 import logging
 from shutil import copy2
+import math
 
 from scipy import optimize
 import xlsxwriter
@@ -356,7 +356,7 @@ def ErFit(Ei, ODnorm, w, optim, Enorm):
     ER = Ei[er]
     if Enorm == Enorm_C:
         for i in ER:
-            ER[k] = sqrt(np.absolute(
+            ER[k] = math.sqrt(np.absolute(
                 (all_gaussians_C(Ei[k], w, *optim))**2 - ((ODnorm[k])**2)))
             k = k + 1
     if Enorm == Enorm_N:
@@ -668,7 +668,7 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
             if max(E) >= Emax_O:
                 Kc3, Kn2, Ko = normalize_f2(OD, f, E=E, E_Cf2=E_Cf2, OD_Cf2=OD_Cf2,  E_Nf2=E_Nf2,
                                             OD_Nf2=OD_Nf2, E_Of2=E_Of2,  OD_Of2=OD_Of2, savepath=savepath, fig_format=fig_format)
-                OD_Normf2_O = ODi_O / Ko
+#                OD_Normf2_O = ODi_O / Ko
     #           tab_norm_sp_O_f2 [i,:] = OD_Normf2_O
     #           tab_f2_O [i] = Ko
                 tab_OC_f2[i] = Ko / Kc3
@@ -1042,7 +1042,7 @@ def run(spectra_folder_path, results_directory, fig_format, demo=False):
         if os.path.exists(demo_path):
             raise ValueError(
                 "The demo directory already exists in the directory: %s" %
-                directory)
+                spectra_folder_path)
         os.makedirs(demo_path)
         files = [
             "nebulotron.txt",

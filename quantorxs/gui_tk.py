@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter.filedialog import askdirectory
 import tkinter.scrolledtext as ScrolledText
 import logging
-import time
 import threading
 import os
 
@@ -37,9 +36,16 @@ class TextHandler(logging.Handler):
         self.text.after(0, append)
 
 
+# Logging configuration
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s')
+
+
 def main():
     def process_spectra(*args, **kwargs):
-        results_directory = T.get("1.0", 'end-1c')
+        global res_dir
+        results_directory = res_dir.get("1", "end-1c")
         fig_format = formats[v.get()][0].lower()
         logger.info("Data directory: %s" % directory.get())
         logger.info("Results directory: %s" %
@@ -47,17 +53,23 @@ def main():
         logger.info("Figure format: %s" % fig_format)
         logger.info("Demo mode %s" % demo.get())
         logger.info("Starting data analysis")
-        run(
-            spectra_folder_path=directory.get(),
-            results_directory=results_directory,
-            fig_format=fig_format,
-            demo=demo.get())
+        try:
+            run(
+                spectra_folder_path=directory.get(),
+                results_directory=results_directory,
+                fig_format=fig_format,
+                demo=demo.get())
+        except Exception as e:
+            logger.info("Unfortunately something went wrong.")
+            logger.exception("message")
+            return
         logger.info("All done!")
 
-    def update_directory():
-        directory.set(askdirectory())
-
+    # Run the data processing routines in a separate thread not to block
+    # the user interface
     t1 = threading.Thread(target=process_spectra, args=[])
+
+    # Create main window
     root = tk.Tk()
     # Set the window's icon
     iconpath = pkg_resources.resource_filename(
@@ -65,14 +77,22 @@ def main():
     imgicon = tk.PhotoImage(file=iconpath)
     root.tk.call('wm', 'iconphoto', root._w, imgicon)
     root.title("QUANTORXS GUI")
+
+    # Demo text widget
     demo = tk.BooleanVar()
-    directory = tk.StringVar("")
+    tk.Checkbutton(root, text="Demo", variable=demo).grid(row=2, sticky=tk.W)
+
+    # Result directory button
     results_directory_label = tk.Label(root, text="Results directory")
     results_directory_label.grid(row=1, column=0)
-    T = tk.Text(root, height=1, width=30)
-    T.insert(tk.END, "QUANTORXS results")
-    T.grid(row=1, column=1)
-    tk.Checkbutton(root, text="Demo", variable=demo).grid(row=2, sticky=tk.W)
+    res_dir = tk.Text(root, height=1, width=30)
+    res_dir.insert(tk.END, "QUANTORXS results")
+    res_dir.grid(row=1, column=1)
+
+    # Directory button
+    directory = tk.StringVar("")
+    def update_directory():
+        directory.set(askdirectory())
 
     directory_button = tk.Button(root,
                                  text="Choose data directory",
@@ -82,19 +102,21 @@ def main():
     directory_button.grid(row=0, sticky=tk.W)
     directory_txt = tk.Label(root, textvariable=directory)
     directory_txt.grid(row=0, column=1)
+
+    # Quin and run buttons
     quit_button = tk.Button(root,
                             text="QUIT",
                             # fg="red",
                             command=quit)
-    # quit_button.pack(side="left")
     run_button = tk.Button(root,
                            text="RUN",
                            # fg="red",
                            command=t1.start)
 
+
+    # Figure format choice list
     v = tk.IntVar()
     v.set(1)  # initializing the choice, i.e. Python
-
     formats = [
         ("SVG", 1),
         ("PDF", 2),
@@ -129,12 +151,8 @@ def main():
     # Create textLogger
     text_handler = TextHandler(st)
 
-    # Logging configuration
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s')
-
     # Add the handler to logger
     main_logger.addHandler(text_handler)
+
 
     root.mainloop()
