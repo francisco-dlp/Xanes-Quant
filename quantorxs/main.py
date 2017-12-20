@@ -537,7 +537,13 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
     i = 0
     for f in glob.glob(spectra_folder_path + "/*.txt"):
         logger.info("Processing file %s" % f)
-        E, OD = openfile(f)
+        try:
+            E, OD = openfile(f)
+        except Exception as e:
+            logger.info(
+                "Not processing file %s as it is not in a supported format" % f)
+            logger.debug("message")
+            continue
         a = 0
         for p in range(0, len(E)):
             E[a] = E[a] + shift
@@ -684,6 +690,8 @@ def process_spectra(spectra_folder_path, savepath, fig_format="pdf"):
             f_O.close()
         i = i + 1
 
+    if i == 0:
+        raise IOError("The data directory does not contain any valid file.")
     # Plot the last spectrum of the list and the fit
     plt.plot(Eifit_C, all_gaussians_C(Eifit_C, w_C, *optim_C),
              lw=3, c='b', label='fit of all Gaussians')
