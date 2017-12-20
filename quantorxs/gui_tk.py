@@ -1,11 +1,12 @@
 import tkinter as tk
 from tkinter.filedialog import askdirectory
 import tkinter.scrolledtext as ScrolledText
-from subprocess import call
 import logging
 import time
 import threading
 import os
+
+import pkg_resources
 
 from quantorxs.main import run
 from quantorxs import logger as main_logger
@@ -58,6 +59,11 @@ def main():
 
     t1 = threading.Thread(target=process_spectra, args=[])
     root = tk.Tk()
+    # Set the window's icon
+    iconpath = pkg_resources.resource_filename(
+        "quantorxs", os.path.join("data", "images", "quantorxs_logo.gif"))
+    imgicon = tk.PhotoImage(file=iconpath)
+    root.tk.call('wm', 'iconphoto', root._w, imgicon)
     root.title("QUANTORXS GUI")
     demo = tk.BooleanVar()
     directory = tk.StringVar("")
