@@ -44,7 +44,6 @@ logging.basicConfig(
 
 def main():
     def process_spectra(*args, **kwargs):
-        global res_dir
         results_directory = res_dir.get("1", "end-1c")
         fig_format = formats[v.get()][0].lower()
         logger.info("Data directory: %s" % directory.get())
