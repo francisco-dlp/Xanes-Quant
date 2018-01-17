@@ -3,6 +3,7 @@
 
 """
 import os
+import sys
 import argparse
 
 
@@ -33,10 +34,14 @@ parser.add_argument(
     action="store_true")
 
 
-args = parser.parse_args()
+def main(args=None):
+    if args is None:
+        args = sys.argv[1:]
 
-run(
-    spectra_folder_path=args.directory,
-    savepath=args.results_directory,
-    fig_format=args.fig_format,
-    demo=args.demo)
+    args = parser.parse_args()
+
+    run(
+        spectra_folder_path=args.directory,
+        results_directory=args.results_directory,
+        fig_format=args.fig_format,
+        demo=args.demo)
