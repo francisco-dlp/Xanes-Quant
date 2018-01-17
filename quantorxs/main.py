@@ -53,18 +53,19 @@ Emax_O = 680
 shift = 0
 
 # Values issued from the calibration used to quantify the functional groups
-Aro_pente = 524.864
-Aro_ordo = -2.587
-Aro_s1 = 4.5
-Keton_pente = 283.011
-Keton_ordo = -2.851
-Keton_s1 = 2.4
-Ali_pente = 699.038
-Ali_ordo = -22.241
-Ali_s1 = 11.1
-Carbo_pente = 40.801
-Carbo_ordo = -4.001
-Carbo_s1 = 7.2
+Aro_pente = 655.9 #526.4 for 4 bands
+Aro_ordo = -2.944 #-2.052 for 4 bands
+Aro_s1 = 3.9 # 3.68 for 4 bands
+
+Keton_pente = 274.7	
+Keton_ordo = -2.6
+Keton_s1 = 2.23
+Ali_pente = 681.86
+Ali_ordo = -19.531
+Ali_s1 = 11.2
+Carbo_pente = 33.57
+Carbo_ordo = -1.4
+Carbo_s1 = 7.45
 
 # Creates lists of the functional groups used for the gaussian deconvolutions
 Func_Group_C = np.array((284.1, 284.4, 284.7, 285, 285.4, 285.8, 286.2, 286.5, 286.8, 287.2, 287.5, 287.8, 288.2, 288.5, 288.9,
