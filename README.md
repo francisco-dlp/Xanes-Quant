@@ -14,14 +14,14 @@ Download the appropriate setup file (windows, Mac, linux) and execute it...
 * From the start menu, open "anaconda prompt" and type (the directory does not matter):
 
 ```bash
-conda install quantorxs -c
+conda install quantorxs
 ```
 
 ![Alt text](/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
 
 ![Alt text](/Images/Install_command_line.jpg "The install command line")
 
-* Quantorxs is automatically installed in the anaconda environment, and you can look for the executable file “Quantorxs_gui” in the start menu and launch it…(and create a shortcut for later?)
+* Quantorxs is automatically installed in the anaconda environment, and you can look for the executable file “quantorxs_gui” in the start menu and launch it…(and create a shortcut for later?)
 
 ![Alt text](/Images/Start_quantorxs.jpg "where to find quantorxs")
 
@@ -42,6 +42,7 @@ QUANTORXS reads only the format produced by aXis200: http://unicorn.mcmaster.ca/
 
 * Click on “choose data directory”. It is the folder containing the source spectra.
 * Type in an output folder name (default is “QuantORXS result” and appears in the folder from which the data are taken)
+* Uncheck the "demo" box. If checked, it uses default files as input to produce an example of the output files. 
 * Select the format of the figure output (default: *.svg)
 * There is an "offset" box to allow offsetting all spectra at once (if monochromator was not perfectly calibrated, it happens...)
 * click on “Run” and wait (should take a few secondes per spectrum)
