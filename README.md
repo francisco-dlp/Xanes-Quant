@@ -41,7 +41,7 @@ The program is designed to process several spectra at once. All source spectra s
 QUANTORXS reads only the format produced by aXis200: http://unicorn.mcmaster.ca/aXis2000.html
 
 * Click on “choose data directory”. It is the folder containing the source spectra.
-* Type in an output folder name (default is “QuantORXS result” and appears in the folder from which the data are taken)
+* Type in an output folder name (default is “QUANTORXS result” and it is created in the folder from which the data are taken)
 * Uncheck the "demo" box. If checked, it uses default files as input to produce an example of the output files. 
 * Select the format of the figure output (default: *.svg)
 * There is an "offset" box to allow offsetting all spectra at once (if monochromator was not perfectly calibrated, it happens...)
@@ -56,7 +56,7 @@ An .xls result file and two different sub-folders are created:
 
 ### a .xls file contains several sheets:
 * The fitting parameters 
-* The quantified data (aromatic, ketones, aliphatics, carboxylics) and some related plots
+* The quantified data (aromatic, ketones, aliphatics, carboxylics; as well as N/C and O/C ratios) and some related plots
 * The spectra at the C-K edge normalized by the area ratio method
 * The spectra at the N-K edge normalized by the area ratio method
 * The spectra at the O-K edge normalized by the area ratio method
