@@ -15,6 +15,7 @@ Download the appropriate setup file (windows, Mac, linux) and execute it...
 
 ```bash
 conda install quantorxs -c
+```
 
 ![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Anaconda_prompt.jpeg "where to find anaconda prompt")
 ![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Install_command_line.jpeg "The install command line")
