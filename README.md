@@ -6,6 +6,8 @@ A published article describes the methods which are based on a empirical calibra
 It automatically performs background subtraction, normalization to the total carbon content and spectra deconvolution. 
 Figures are automatically plotted for direct data visualization and data output are gathered in an excel file.
 
+The code was initially written by Corentin Le Guillou (http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr) and Francisco De La Pena created the user interfaces(http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr).
+
 ## Installing QUANTORXS.
 
 * Inexperienced python users should first install the latest Anaconda distribution (a suite of python packages and an environment to install further options: https://www.anaconda.com/download/. 
