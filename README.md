@@ -17,12 +17,13 @@ Download the appropriate setup file (windows, Mac, linux) and execute it...
 conda install quantorxs -c
 ```
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Install_command_line.jpg "The install command line")
+![Alt text](https://github.com/CorentinLG/Xanes-Quant/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
+
+![Alt text](/Images/Install_command_line.jpg "The install command line")
 
 * Quantorxs is automatically installed in the anaconda environment, and you can look for the executable file “Quantorxs_gui” in the start menu and launch it…(and create a shortcut for later?)
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Start_quantorxs.jpg "where to find quantorxs")
+![Alt text](https://github.com/CorentinLG/Xanes-Quant/Images/Start_quantorxs.jpg "where to find quantorxs")
 
 
 # Running the program:
@@ -63,10 +64,12 @@ An .xls result file and two different sub-folders are created:
 * The fitted heights of the Gaussians for the area-based normalization at the O-K edge
 
 ![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab1.jpg "Analysis parameters")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab2.jpg "Quantified data")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab3.jpg "normalized spectra")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab4.jpg "fitted gaussians")
 
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab2.jpg "Quantified data")
+
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab3.jpg "normalized spectra")
+
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab4.jpg "fitted gaussians")
 
 ### A folder containing the .txt files of each normalized spectrum
 
