@@ -8,7 +8,7 @@ Figures are automatically plotted for direct data visualization and data output 
 
 ## Installing QUANTORXS.
 
-* Inexperienced python users should first install the latest Anaconda distribution (a suite of python packages and an environment to install further options: https://anaconda.org/anaconda/python. 
+* Inexperienced python users should first install the latest Anaconda distribution (a suite of python packages and an environment to install further options: https://www.anaconda.com/download/. 
 Download the appropriate setup file (windows, Mac, linux) and execute it...
 
 * From the start menu, open "anaconda prompt" and type (the directory does not matter):
