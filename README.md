@@ -17,12 +17,12 @@ Download the appropriate setup file (windows, Mac, linux) and execute it...
 conda install quantorxs -c
 ```
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Anaconda_prompt.jpeg "where to find anaconda prompt")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Install_command_line.jpeg "The install command line")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Install_command_line.jpg "The install command line")
 
 * Quantorxs is automatically installed in the anaconda environment, and you can look for the executable file “Quantorxs_gui” in the start menu and launch it…(and create a shortcut for later?)
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Start_quantorxs.jpeg "where to find quantorxs")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Start_quantorxs.jpg "where to find quantorxs")
 
 
 # Running the program:
@@ -32,7 +32,7 @@ Basically, it opens, normalize, fit, quantifies and export the results for each 
 The user interface is designed to be as simple as possible. In order to keep the quantification reproducible, there is no possibility to play with the fitting parameters. 
 However, users willing to modify the code can find it here: https://github.com/CorentinLG/Xanes-Quant
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Program_sequence.jpeg "Sequence of operations performed by the program")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Program_sequence.jpg "Sequence of operations performed by the program")
 
 ## How to use the graphical interface
 
@@ -45,7 +45,7 @@ QUANTORXS reads only the format produced by aXis200: http://unicorn.mcmaster.ca/
 * There is an "offset" box to allow offsetting all spectra at once (if monochromator was not perfectly calibrated, it happens...)
 * click on “Run” and wait (should take a few secondes per spectrum)
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Quantorxs_gui.jpeg "The graphical user interface")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/Quantorxs_gui.jpg "The graphical user interface")
 
 ## Description of the output files
 
@@ -62,10 +62,10 @@ An .xls result file and two different sub-folders are created:
 * The fitted heights of the Gaussians for the area-based normalization at the N-K edge
 * The fitted heights of the Gaussians for the area-based normalization at the O-K edge
 
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab1.jpeg "Analysis parameters")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab2.jpeg "Quantified data")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab3.jpeg "normalized spectra")
-![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab4.jpeg "fitted gaussians")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab1.jpg "Analysis parameters")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab2.jpg "Quantified data")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab3.jpg "normalized spectra")
+![Alt text] (https://github.com/CorentinLG/Xanes-Quant/Images/excel_Tab4.jpg "fitted gaussians")
 
 
 ### A folder containing the .txt files of each normalized spectrum
