@@ -16,38 +16,34 @@ import pkg_resources
 from quantorxs.io import openf2, openfile
 
 logger = logging.getLogger(__name__)
-# Description of all parameters used for further analysis of the spectra
 
+# Description of all parameters used for further analysis
 Emin = 270              # Lower energy of the range used for the raw spectrum _ 270
 Emax_C = 700            # Higher end of the energy range used for the raw spectrum
 dE = 0.1			    # Energy step used for the discretization of the spectrum
 
-# Energy up to which the pre-edge background fitting is performed _ 282
-Estop_C = 282
+Estop_C = 282           # Energy up to which the pre-edge background fitting is performed _ 282
 Enorm_C = 291.5         # Energy up to which the area normalization is calculated _ 291.5
 Efit_C = 305            # Energy up to which the gaussian fitting is performed _ 305
-# Energy from which the fitting of the carbon step function is considered for fitting the post-edge _ 355
-EpeMin_C = 355
+
+EpeMin_C = 355          # Energy from which the fitting of the carbon step function is considered for fitting the post-edge _ 355
 w_C = 0.2               # Half Width at Half Maximum of the fitted gaussians _ 0.2
 
 Emin_N = 370            # Energy at which the Nitrogen edge analysis begins _ 370
-# Energy up to which the pre-edge background fitting is performed _ 397
-Estop_N = 395
+
+Estop_N = 395           # Energy up to which the pre-edge background fitting is performed _ 397
 Enorm_N = 406.5         # Energy up to which the area normalization is calculated _ 406.5
 Efit_N = 420            # Energy up to which the gaussian fitting is performed _ 420
-# Energy from which the fitting of the Nitrogen step function is considered for fitting the post edge _ 430
-EpeMin_N = 430
+
+EpeMin_N = 430          # Energy from which the fitting of the Nitrogen step function is considered for fitting the post edge _ 430
 Emax_N = 449            # Energy up to which the fitting of the post edge is performed _ 449
 w_N = 0.3               # Half Width at Half Maximum used for the fitted gaussians _ 0.3
 
-Emin_O = 470            # Energy at which the Oxygen edge analysis begins _ 470
-# Energy up to which the pre-edge background fitting is performed _ 527.5
-Estop_O = 527.5
-Enorm_O = 540           # Energy up to which the area normalization is calculated _ 540
-# Energy from which the fitting of the Oxygen step function is considered for fitting the post edge _ 600
-EpeMin_O = 600
-# Energy up to which the fitting of the Oxygen step function is considered for fitting the post edge _ 680
-Emax_O = 680
+Emin_O = 450            # Energy from which the backgroudn is fitted for the Oxygen edge analysis_ 450
+Estop_O = 530           # Energy up to which the pre-edge background fitting is performed _ 527.5
+Enorm_O = 541           # Energy up to which the area normalization is calculated _ 540
+EpeMin_O = 570          # Energy from which the fitting of the Oxygen step function is considered for fitting the post edge _ 600
+Emax_O = 610            # Energy up to which the fitting of the Oxygen step function is considered for fitting the post edge _ 680
 
 # If energy axis needs calibration, the spectra can be directly shifted here.
 shift = 0
@@ -88,8 +84,6 @@ def discretize(E, ODlb, Einf, Esup):
     return Ei, ODi
 
 # Substract a power law background from a spectrum
-
-
 def powerlaw_Bgd(E, OD, Emin, Estop):
     if max(E) <= 400:
         Emin = np.ceil(min(E))
@@ -118,8 +112,7 @@ def powerlaw_Bgd(E, OD, Emin, Estop):
     OD_lb_powlaw = OD - (param[0] + powerlaw(E, param[1], param[2]))
     return OD_lb_powlaw
 
-# Normalize the spectrum by fitting the f2 scattering over a range of pre-edge and post-edge energies then plot
-
+# Normalize the spectrum by fitting the f2 cross section over a range of pre-edge and post-edge energies - then plot
 
 def normalize_f2(OD, f, E, E_Cf2, OD_Cf2, E_Nf2, OD_Nf2, E_Of2, OD_Of2, savepath, fig_format):
     Ei, ODi = discretize(E, OD, Emin, max(E))
