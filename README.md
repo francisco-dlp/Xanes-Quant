@@ -1,53 +1,70 @@
 ﻿# QUANTORXS : QUANTification of ORganics by X-ray Spectrosocopy
 
-This program analyze Carbon and Nitrogen K-edge spectra (and Oxygen) and retrieves the functional group concentrations and the elemental ratio (N/C, O/C).
+QUANTORXS is an opensource program to automatically analyze X-ray spectroscopy spectra of Carbon, Nitrogen and Oxygen K-edges edges to quantify the concentration of functional groups and the elemental ratios N/C and O/C using a novel quantification method that will soon be pusblished in a peer-reviewed scientific article.
 
-A published article describes the methods which are based on a empirical calibrations.
-It automatically performs background subtraction, normalization to the total carbon content and spectra deconvolution. 
-Figures are automatically plotted for direct data visualization and data output are gathered in an excel file.
+QUANTORXS performs the following tasks automatically:
 
-The code was initially written by Corentin Le Guillou (http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr) and Francisco De La Pena created the user interfaces(http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr).
+* Load the data from the file(s)
+* Remove background
+* Normalize the spectral
+* Generate a model of the fine structure a fit it to the experimental data
+* Calculate the functional groups abundances and elemental rations from the results of the fit
+* Generate an Excel file and multiple figures with the results and normalised spectra files.
+
+This is illustrated in more detail in the following diagram:
+
+![Alt text](/Images/Program_sequence.jpg "Sequence of operations performed by the program")
+
+QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/Xanes-Quant).
+
+The code was initially written by [Corentin Le Guillou](http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr). [Francisco de la Peña](http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr) created the CLI and GUI.
 
 ## Installing QUANTORXS.
 
-* Inexperienced python users should first install the latest Anaconda distribution (a suite of python packages and an environment to install further options: https://www.anaconda.com/download/. 
-Download the appropriate setup file (windows, Mac, linux) and execute it...
+QUANTORXS is written in the Python programming languague and is available from [pypi](https://pypi.org/project/quantorxs). It runs in any operating system with the Python programming language installed.
 
-* From the start menu, open "anaconda prompt" and type (the directory does not matter):
+To install QUANTORXS execute the following in a terminal:
 
 ```bash
-conda install quantorxs
+pip install quantorxs
 ```
+
+### Step-by-step installation instructions for Windows users
+
+If you are new to Python we reccomend you to install the opensource and free [Anaconda Python distribution](https://www.anaconda.com/download/) for your platform first. Afterwards, from the Microsoft Windows ``Start Menu``, open "anaconda prompt" as in the image below:
 
 ![Alt text](/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
 
+Then  type the following and press ``Enter`` (requires connection to the internet):
+
+```bash
+pip install quantorxs
+```
+
 ![Alt text](/Images/Install_command_line.jpg "The install command line")
 
-* Quantorxs is automatically installed in the anaconda environment, and you can look for the executable file “quantorxs_gui” in the start menu and launch it…(and create a shortcut for later?)
+That's all! QUANTORXS should now be installed in your system.
+
+
+## Starting the QUANTORXS Graphical User Interface
+
+To start the graphical interface execute the ``quantorxs_gui`` e.g. a terminal. Alternatively, Windows users can start it by  searching for the executable file “quantorxs_gui” in the ``Start Menu`` and launching it as shown in the image below.
 
 ![Alt text](/Images/Start_quantorxs.jpg "where to find quantorxs")
 
 
-# Running the program:
-## Sequence of operation performed by the program
-
-Basically, it opens, normalize, fit, quantifies and export the results for each spectrum.
-The user interface is designed to be as simple as possible. In order to keep the quantification reproducible, there is no possibility to play with the fitting parameters. 
-However, users willing to modify the code can find it here: https://github.com/CorentinLG/Xanes-Quant
-
-![Alt text](/Images/Program_sequence.jpg "Sequence of operations performed by the program")
 
 ## How to use the graphical interface
 
 The program is designed to process several spectra at once. All source spectra should be assembled in one folder.
-QUANTORXS reads only the format produced by aXis200: http://unicorn.mcmaster.ca/aXis2000.html
+QUANTORXS reads only the format produced by [aXis2000](http://unicorn.mcmaster.ca/aXis2000.html)
 
-* Click on “choose data directory”. It is the folder containing the source spectra.
-* Type in an output folder name (default is “QUANTORXS result” and it is created in the folder from which the data are taken)
-* Uncheck the "demo" box. If checked, it uses default files as input to produce an example of the output files. 
-* Select the format of the figure output (default: *.svg)
-* There is an "offset" box to allow offsetting all spectra at once (if monochromator was not perfectly calibrated, it happens...)
-* click on “Run” and wait (should take a few secondes per spectrum)
+* Click on the ``Choose data directory`` button and select the folder containing the source spectra.
+* Type in an output folder name (relative to the data directory) to store the results of the analysis. The default is ``QUANTORXS results``.
+* Make sure that the ``demo`` box is not checked. If checked, it uses default files as input to produce an example of the output files.
+* Select the format of the figure output (the default is SVG)
+* Set the ``offset`` if required to compensate from any energy misalignment (e.g. from poorly calibrated monochromator) *common to all spectra*.
+* Click the ``Run`` button and wait until the analysis is completed (usually a few secondes per spectrum).
 
 ![Alt text](/Images/Quantorxs_gui.jpg "The graphical user interface")
 
@@ -57,7 +74,7 @@ The output folder will be created in the folder from which the data have been ta
 An .xls result file and two different sub-folders are created:
 
 ### a .xls file contains several sheets:
-* The fitting parameters 
+* The fitting parameters
 * The quantified data (aromatic, ketones, aliphatics, carboxylics; as well as N/C and O/C ratios) and some related plots
 * The spectra at the C-K edge normalized by the area ratio method
 * The spectra at the N-K edge normalized by the area ratio method
@@ -81,4 +98,3 @@ An .xls result file and two different sub-folders are created:
 * The cross-section fit
 * The normalized spectra
 * The deconvolution (all gaussians included)
- 
