@@ -11,32 +11,39 @@ QUANTORXS performs the following tasks automatically:
 * Calculate the functional groups abundances and elemental rations from the results of the fit
 * Generate an Excel file and multiple figures with the results and normalised spectra files.
 
-This is illustrated in model detail in the following diagram.
+This is illustrated in more detail in the following diagram:
 
 ![Alt text](/Images/Program_sequence.jpg "Sequence of operations performed by the program")
 
-QUANTORXS is designed to work without any user input other than the experimental spectra. However, users willing to modify the details of the model can download the code [GitHub](https://github.com/CorentinLG/Xanes-Quant)
+QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/Xanes-Quant).
 
 The code was initially written by [Corentin Le Guillou](http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr). [Francisco de la Peña](http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr) created the CLI and GUI.
 
 ## Installing QUANTORXS.
 
-QUANTORXS is written in the Python programming languague and is available from pypi. If you are new to Python we reccomend you to install the opensource and free [Anaconda Python distribution](https://www.anaconda.com/download/) for your platform first.
+QUANTORXS is written in the Python programming languague and is available from [pypi](https://pypi.org/project/quantorxs). It runs in any operating system with the Python programming language installed.
 
-To QUANTORXS execute the following in a terminal (e.g. the Anaconda Prompt  in Windows):
+To install QUANTORXS execute the following in a terminal:
 
 ```bash
 pip install quantorxs
 ```
 
-### Detailed instructions for Windows users
+### Step-by-step installation instructions for Windows users
 
-* From the start menu, open "anaconda prompt" and type (the directory does not matter):
+If you are new to Python we reccomend you to install the opensource and free [Anaconda Python distribution](https://www.anaconda.com/download/) for your platform first. Afterwards, from the Microsoft Windows ``Start Menu``, open "anaconda prompt" as in the image below:
 
 ![Alt text](/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
 
+Then  type the following and press ``Enter`` (requires connection to the internet):
+
+```bash
+pip install quantorxs
+```
+
 ![Alt text](/Images/Install_command_line.jpg "The install command line")
 
+That's all! QUANTORXS should now be installed in your system.
 
 
 ## Starting the QUANTORXS Graphical User Interface
@@ -52,9 +59,9 @@ To start the graphical interface execute the ``quantorxs_gui`` e.g. a terminal. 
 The program is designed to process several spectra at once. All source spectra should be assembled in one folder.
 QUANTORXS reads only the format produced by [aXis2000](http://unicorn.mcmaster.ca/aXis2000.html)
 
-* Click on “choose data directory” and select the folder containing the source spectra.
-* Type in an output folder name to store the results of the analysis. The default is storing the results in a ``QUANTORXS result`` folder in the data directory selected in the preceding step.
-* Make sure that the "demo" box is not checked. If checked, it uses default files as input to produce an example of the output files.
+* Click on the ``Choose data directory`` button and select the folder containing the source spectra.
+* Type in an output folder name (relative to the data directory) to store the results of the analysis. The default is ``QUANTORXS results``.
+* Make sure that the ``demo`` box is not checked. If checked, it uses default files as input to produce an example of the output files.
 * Select the format of the figure output (the default is SVG)
 * Set the ``offset`` if required to compensate from any energy misalignment (e.g. from poorly calibrated monochromator) *common to all spectra*.
 * Click the ``Run`` button and wait until the analysis is completed (usually a few secondes per spectrum).
