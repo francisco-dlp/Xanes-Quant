@@ -13,7 +13,7 @@ QUANTORXS performs the following tasks automatically:
 
 This is illustrated in more detail in the following diagram:
 
-![Alt text](/Images/Program_sequence.jpg "Sequence of operations performed by the program")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/Program_sequence.jpg "Sequence of operations performed by the program")
 
 QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/QuantORXS.
 
@@ -33,7 +33,7 @@ pip install quantorxs
 
 If you are new to Python we reccomend you to install the opensource and free [Anaconda Python distribution](https://www.anaconda.com/download/) for your platform first. Afterwards, from the Microsoft Windows ``Start Menu``, open "anaconda prompt" as in the image below:
 
-![Alt text](/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/Anaconda_prompt.jpg "where to find anaconda prompt")
 
 Then  type the following and press ``Enter`` (requires connection to the internet):
 
@@ -41,7 +41,7 @@ Then  type the following and press ``Enter`` (requires connection to the interne
 pip install quantorxs
 ```
 
-![Alt text](/Images/Install_command_line.jpg "The install command line")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/Install_command_line.jpg "The install command line")
 
 That's all! QUANTORXS should now be installed in your system.
 
@@ -50,7 +50,7 @@ That's all! QUANTORXS should now be installed in your system.
 
 To start the graphical interface execute the ``quantorxs_gui`` e.g. a terminal. Alternatively, Windows users can start it by  searching for the executable file “quantorxs_gui” in the ``Start Menu`` and launching it as shown in the image below.
 
-![Alt text](/Images/Start_quantorxs.jpg "where to find quantorxs")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/Start_quantorxs.jpg "where to find quantorxs")
 
 
 
@@ -66,7 +66,7 @@ QUANTORXS reads only the format produced by [aXis2000](http://unicorn.mcmaster.c
 * Set the ``offset`` if required to compensate from any energy misalignment (e.g. from poorly calibrated monochromator) *common to all spectra*.
 * Click the ``Run`` button and wait until the analysis is completed (usually a few secondes per spectrum).
 
-![Alt text](/Images/Quantorxs_gui.jpg "The graphical user interface")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/Quantorxs_gui.jpg "The graphical user interface")
 
 ## Description of the output files
 
@@ -83,13 +83,13 @@ An .xls result file and two different sub-folders are created:
 * The fitted heights of the Gaussians for the area-based normalization at the N-K edge
 * The fitted heights of the Gaussians for the area-based normalization at the O-K edge
 
-![Alt text](/Images/excel_Tab1.jpg "Analysis parameters")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/excel_Tab1.jpg "Analysis parameters")
 
-![Alt text](/Images/excel_Tab2.jpg "Quantified data")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/excel_Tab2.jpg "Quantified data")
 
-![Alt text](/Images/excel_Tab3.jpg "normalized spectra")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/excel_Tab3.jpg "normalized spectra")
 
-![Alt text](/Images/excel_Tab4.jpg "fitted gaussians")
+![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/excel_Tab4.jpg "fitted gaussians")
 
 ### A folder containing the .txt files of each normalized spectrum
 
