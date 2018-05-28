@@ -6,7 +6,7 @@ QUANTORXS performs the following tasks automatically:
 
 * Load the data from the file(s)
 * Remove background
-* Normalize the spectral
+* Normalize the spectra
 * Generate a model of the fine structure a fit it to the experimental data
 * Calculate the functional groups abundances and elemental rations from the results of the fit
 * Generate an Excel file and multiple figures with the results and normalised spectra files.
@@ -15,7 +15,7 @@ This is illustrated in more detail in the following diagram:
 
 ![Alt text](/Images/Program_sequence.jpg "Sequence of operations performed by the program")
 
-QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/Xanes-Quant).
+QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/QuantORXS.
 
 The code was initially written by [Corentin Le Guillou](http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr). [Francisco de la Peña](http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr) created the CLI and GUI.
 
