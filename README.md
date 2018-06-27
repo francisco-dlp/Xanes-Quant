@@ -1,6 +1,6 @@
 ﻿# QUANTORXS : QUANTification of ORganics by X-ray Spectrosocopy
 
-QUANTORXS is an opensource program to automatically analyze X-ray spectroscopy spectra of Carbon, Nitrogen and Oxygen K-edges edges to quantify the concentration of functional groups and the elemental ratios N/C and O/C using a novel quantification method that will soon be pusblished in a peer-reviewed scientific article.
+QUANTORXS is an open-source program to automatically analyze XANES spectra at Carbon, Nitrogen and Oxygen K-edges edges to quantify the concentration of functional groups and the elemental ratios (N/C and O/C). It is based on a novel quantification method published in [Analytical chemistry](https://pubs.acs.org/doi/full/10.1021/acs.analchem.8b00689).
 
 QUANTORXS performs the following tasks automatically:
 
@@ -15,9 +15,9 @@ This is illustrated in more detail in the following diagram:
 
 ![Alt text](https://github.com/CorentinLG/QuantORXS/raw/master/Images/Program_sequence.jpg "Sequence of operations performed by the program")
 
-QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/QuantORXS.
+QUANTORXS is designed to work without any user input other than the experimental spectra. Users willing to modify the details of the quantification can download the code from its [GitHub repository](https://github.com/CorentinLG/QuantORXS).
 
-The code was initially written by [Corentin Le Guillou](http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr). [Francisco de la Peña](http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr) created the CLI and GUI.
+The code was initially written by [Corentin Le Guillou](http://umet.univ-lille1.fr/detailscomplets.php?id=505&lang=fr). [Francisco de la Peña](http://umet.univ-lille1.fr/detailscomplets.php?id=614&lang=fr) created the command line and graphical user interfaces.
 
 ## Installing QUANTORXS.
 
